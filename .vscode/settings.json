@@ -1,0 +1,32 @@
+{
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "attend",
+      "database": "attend",
+      "username": "root"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "db4free.net",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "helper4u_jobs",
+      "group": "helper4u_jobs",
+      "database": "helper4u_jobs",
+      "username": "helper4u_jobs",
+      "password": "helper4u_jobs"
+    }
+  ]
+}
