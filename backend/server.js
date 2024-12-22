@@ -9,9 +9,10 @@ const {
 } = require("@google/generative-ai");
 require("dotenv").config();
 
+// Initialize the app
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.use(cors()); // Enable CORS
+app.use(express.json()); // Parse JSON request bodies
 
 // Database connection
 const db = mysql.createConnection({
@@ -21,7 +22,21 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME || "helper4u_jobs",
 });
 
+// Check database connection
+db.connect((err) => {
+  if (err) {
+    console.error("Error connecting to the database:", err.message);
+  } else {
+    console.log("Connected to the database.");
+  }
+});
+
 // Admin Routes
+
+/**
+ * Create a new job posting.
+ * Request body: { title, description, location, salary, contact_email }
+ */
 app.post("/api/jobs", async (req, res) => {
   const { title, description, location, salary, contact_email } = req.body;
   try {
@@ -33,20 +48,31 @@ app.post("/api/jobs", async (req, res) => {
       );
     res.json({ success: true, jobId: result.insertId });
   } catch (error) {
+    console.error("Error adding job:", error.message);
     res.status(500).json({ error: error.message });
   }
 });
 
+/**
+ * Get all job postings.
+ * Response: Array of jobs
+ */
 app.get("/api/jobs", async (req, res) => {
   try {
     const [rows] = await db.promise().query("SELECT * FROM jobs");
     res.json(rows);
   } catch (error) {
+    console.error("Error fetching jobs:", error.message);
     res.status(500).json({ error: error.message });
   }
 });
 
 // Candidate Routes
+
+/**
+ * Submit a job application.
+ * Request body: { job_id, candidate_name, contact }
+ */
 app.post("/api/applications", async (req, res) => {
   const { job_id, candidate_name, contact } = req.body;
   try {
@@ -58,13 +84,19 @@ app.post("/api/applications", async (req, res) => {
       );
     res.json({ success: true, applicationId: result.insertId });
   } catch (error) {
+    console.error("Error adding application:", error.message);
     res.status(500).json({ error: error.message });
   }
 });
 
 // ChatGPT Integration using Google Generative AI
+
+/**
+ * Query jobs using natural language.
+ * Request body: { query }
+ */
 app.post("/api/chat", async (req, res) => {
-  const { query } = req.body; // Expecting query from the user in the request body
+  const { query } = req.body;
   if (!query) {
     return res.status(400).json({ error: "Query is required." });
   }
@@ -119,29 +151,25 @@ app.post("/api/chat", async (req, res) => {
       history: [
         {
           role: "user",
-          parts: [
-            {
-              text: prompt,
-            },
-          ],
+          parts: [{ text: prompt }],
         },
       ],
     });
 
-    // Send the message (user query) to the AI model
     const result = await chatSession.sendMessage(query);
 
-    // Log the result for debugging purposes
-    console.log(result.response.text());
+    // Log the result for debugging
+    console.log("AI Response:", result.response.text());
 
     // Send the AI's response back to the client
     res.json({ response: result.response.text() });
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error in chat API:", error.message);
     res.status(500).json({ error: error.message });
   }
 });
 
+// Start the server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
