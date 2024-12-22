@@ -10,15 +10,25 @@ export default function ApplicationForm({ jobId }: { jobId: string }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3001/api/applications", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ job_id: jobId, candidate_name: name, contact }),
-      });
-      if (response.ok) {
-        setSubmitted(true);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+      if (apiUrl) {
+        const response = await fetch(`${apiUrl}/api/applications`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            job_id: jobId,
+            candidate_name: name,
+            contact,
+          }),
+        });
+        if (response.ok) {
+          setSubmitted(true);
+        }
+      } else {
+        console.error("API URL is not defined in environment variables.");
       }
     } catch (error) {
       console.error("Error submitting application:", error);

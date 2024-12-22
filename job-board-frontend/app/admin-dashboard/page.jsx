@@ -21,9 +21,15 @@ export default function AdminDashboard() {
 
   const fetchJobs = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/jobs");
-      const data = await response.json();
-      setJobs(data);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+      if (apiUrl) {
+        const response = await fetch(`${apiUrl}/api/jobs`);
+        const data = await response.json();
+        setJobs(data);
+      } else {
+        console.error("API URL is not defined in environment variables.");
+      }
     } catch (error) {
       console.error("Error fetching jobs:", error);
     }
@@ -54,24 +60,30 @@ export default function AdminDashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3001/api/jobs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newJob),
-      });
-      const data = await response.json();
-      if (data.success) {
-        alert("Job listing added successfully!");
-        setNewJob({
-          title: "",
-          description: "",
-          location: "",
-          salary: "",
-          contact_email: "",
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+      if (apiUrl) {
+        const response = await fetch(`${apiUrl}/api/jobs`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newJob),
         });
-        fetchJobs(); // Now using the memoized function
+        const data = await response.json();
+        if (data.success) {
+          alert("Job listing added successfully!");
+          setNewJob({
+            title: "",
+            description: "",
+            location: "",
+            salary: "",
+            contact_email: "",
+          });
+          fetchJobs(); // Now using the memoized function
+        }
+      } else {
+        console.error("API URL is not defined in environment variables.");
       }
     } catch (error) {
       console.error("Error adding job:", error);
