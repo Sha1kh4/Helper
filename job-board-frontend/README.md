@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# Helper4U Jobs Frontend
 
-First, run the development server:
+This is the frontend for the **Helper4U Jobs** platform, built using Next.js. It allows admins to manage job postings and users to interact with the job listing and application functionalities.
+
+---
+
+## Features
+
+- **Admin Dashboard**:
+  - Authenticate admin users.
+  - Add new job listings.
+  - View all job listings.
+
+---
+
+## Requirements
+
+- Node.js (v14+ recommended)
+- Supabase Project with Authentication Enabled
+
+---
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository_url>
+cd helper4u-jobs/frontend
+```
+
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### 4. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The frontend will be available at `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deployment
 
-## Learn More
+To deploy the frontend, use any static hosting provider like Vercel or Netlify.
 
-To learn more about Next.js, take a look at the following resources:
+1. Build the production files:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npm run build
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Serve the files:
+   ```bash
+   npm start
+   ```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Directory Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `pages/`: Contains all route files for the app.
+- `components/`: Shared React components.
+- `utils/`: Contains utility functions, such as the Supabase client.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+---
+
+## Author
+
+**Shaikh Adnan**  
+[Portfolio](https://sha1kh4.me) | [Resume](https://sha1kh4.me/resume)
+
+
