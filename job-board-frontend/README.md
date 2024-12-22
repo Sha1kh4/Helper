@@ -1,4 +1,3 @@
-
 # Helper4U Jobs Frontend
 
 This is the frontend for the **Helper4U Jobs** platform, built using Next.js. It allows admins to manage job postings and users to interact with the job listing and application functionalities.
@@ -26,10 +25,9 @@ This is the frontend for the **Helper4U Jobs** platform, built using Next.js. It
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository_url>
-cd helper4u-jobs/frontend
+git clone https://github.com/Sha1kh4/Helper
+cd helper4u-jobs/job-board-frontend
 ```
-
 
 ### 2. Install Dependencies
 
@@ -91,5 +89,3 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 **Shaikh Adnan**  
 [Portfolio](https://sha1kh4.me) | [Resume](https://sha1kh4.me/resume)
-
-

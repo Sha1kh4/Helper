@@ -31,10 +31,9 @@ This project is a job management and application platform powered by Node.js, Ex
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository_url>
-cd helper4u-jobs
+git clone https://github.com/Sha1kh4/Helper
+cd Helper/backend
 ```
-
 
 ### 2. Install Dependencies
 
@@ -144,4 +143,7 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 **Shaikh Adnan**
 [Portfolio](https://sha1kh4.me) | [Resume](https://sha1kh4.me/resume)
-````
+
+```
+
+```

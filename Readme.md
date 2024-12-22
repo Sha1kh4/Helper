@@ -48,13 +48,13 @@ Helper4U is a job management platform designed for admins to manage job postings
 
 ### Frontend
 
-1. Navigate to the `frontend/` folder:
+1. Navigate to the `job-board-frontend/` folder:
 
    ```bash
-   cd frontend
+   cd job-board-frontend
    ```
 
-2. Follow the setup instructions in `frontend/README.md`.
+2. Follow the setup instructions in `job-board-frontend/README.md`.
 
 ---
 
