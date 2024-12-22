@@ -1,22 +1,49 @@
 import Link from "next/link";
-import { getJobs } from "../utils/api";
 
-export default async function Home() {
-  const jobs = await getJobs();
-
+export default function Home() {
   return (
-    <div>
-      <h2 className="text-3xl font-bold mb-6">Available Jobs</h2>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {jobs.map((job) => (
-          <Link href={`/jobs/${job.id}`} key={job.id} className="block">
-            <div className="border rounded-lg p-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold mb-2">{job.title}</h3>
-              <p className="text-gray-600 mb-2">{job.location}</p>
-              <p className="text-green-600 font-semibold">${job.salary}</p>
+    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-light-blue-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+          <div className="max-w-md mx-auto">
+            <div className="divide-y divide-gray-200">
+              <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+                <h2 className="text-3xl font-extrabold text-gray-900">
+                  Welcome to Helper4U Jobs
+                </h2>
+                <p>
+                  Find your dream job or chat with our AI assistant for
+                  personalized recommendations.
+                </p>
+                <div className="pt-6 text-base leading-6 font-bold sm:text-lg sm:leading-7">
+                  <Link
+                    href="/jobs"
+                    className="text-cyan-600 hover:text-cyan-700"
+                  >
+                    View Job Listings &rarr;
+                  </Link>
+                </div>
+                <div className="pt-6 text-base leading-6 font-bold sm:text-lg sm:leading-7">
+                  <Link
+                    href="/chat"
+                    className="text-cyan-600 hover:text-cyan-700"
+                  >
+                    Chat with AI Assistant &rarr;
+                  </Link>
+                </div>
+                <div className="pt-6 text-base leading-6 font-bold sm:text-lg sm:leading-7">
+                  <Link
+                    href="/login"
+                    className="text-cyan-600 hover:text-cyan-700"
+                  >
+                    Admin Login &rarr;
+                  </Link>
+                </div>
+              </div>
             </div>
-          </Link>
-        ))}
+          </div>
+        </div>
       </div>
     </div>
   );

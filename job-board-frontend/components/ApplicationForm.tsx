@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { submitApplication } from "../utils/api";
 
-export default function ApplicationForm({ jobId }: { jobId: number }) {
+export default function ApplicationForm({ jobId }: { jobId: string }) {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -11,8 +10,16 @@ export default function ApplicationForm({ jobId }: { jobId: number }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await submitApplication(jobId, name, contact);
-      setSubmitted(true);
+      const response = await fetch("http://localhost:3001/api/applications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ job_id: jobId, candidate_name: name, contact }),
+      });
+      if (response.ok) {
+        setSubmitted(true);
+      }
     } catch (error) {
       console.error("Error submitting application:", error);
     }
@@ -20,17 +27,19 @@ export default function ApplicationForm({ jobId }: { jobId: number }) {
 
   if (submitted) {
     return (
-      <div className="text-green-600 font-semibold">
-        Application submitted successfully!
-      </div>
+      <p className="text-green-600">
+        Your application has been submitted successfully!
+      </p>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md">
-      <h3 className="text-2xl font-bold mb-4">Apply for this job</h3>
-      <div className="mb-4">
-        <label htmlFor="name" className="block mb-2">
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700"
+        >
           Name
         </label>
         <input
@@ -39,12 +48,15 @@ export default function ApplicationForm({ jobId }: { jobId: number }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full px-3 py-2 border rounded"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="contact" className="block mb-2">
-          Contact Information
+      <div>
+        <label
+          htmlFor="contact"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Contact
         </label>
         <input
           type="text"
@@ -52,12 +64,12 @@ export default function ApplicationForm({ jobId }: { jobId: number }) {
           value={contact}
           onChange={(e) => setContact(e.target.value)}
           required
-          className="w-full px-3 py-2 border rounded"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
         />
       </div>
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
         Submit Application
       </button>

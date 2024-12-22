@@ -2,7 +2,11 @@
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
-const OpenAI = require("openai");
+const {
+  GoogleGenerativeAI,
+  HarmCategory,
+  HarmBlockThreshold,
+} = require("@google/generative-ai");
 require("dotenv").config();
 
 const app = express();
@@ -15,11 +19,6 @@ const db = mysql.createConnection({
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "",
   database: process.env.DB_NAME || "helper4u_jobs",
-});
-
-// OpenAI configuration
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
 });
 
 // Admin Routes
@@ -63,31 +62,82 @@ app.post("/api/applications", async (req, res) => {
   }
 });
 
-// ChatGPT Integration
+// ChatGPT Integration using Google Generative AI
 app.post("/api/chat", async (req, res) => {
-  const { query } = req.body;
-  try {
-    // Fetch jobs data to provide context to ChatGPT
-    const [jobs] = await db.promise().query("SELECT * FROM jobs");
+  const { query } = req.body; // Expecting query from the user in the request body
+  if (!query) {
+    return res.status(400).json({ error: "Query is required." });
+  }
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: `You are a job search assistant. Here are the available jobs: ${JSON.stringify(
-            jobs
-          )}`,
-        },
+  try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    const genAI = new GoogleGenerativeAI(apiKey);
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-flash-exp",
+    });
+
+    const generationConfig = {
+      temperature: 1.85,
+      topP: 0.95,
+      topK: 40,
+      maxOutputTokens: 8192,
+      responseMimeType: "text/plain",
+    };
+
+    // Fetch jobs data from the database
+    const [jobs] = await db
+      .promise()
+      .query("SELECT id, title, location, description FROM jobs;");
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({ error: "No jobs found." });
+    }
+
+    let prompt;
+
+    // Determine the type of query: job suggestion or job details by ID
+    if (query.toLowerCase().includes("job id")) {
+      const jobId = query.match(/\d+/)?.[0]; // Extract job ID from the query
+      const job = jobs.find((j) => j.id === parseInt(jobId));
+
+      if (!job) {
+        return res
+          .status(404)
+          .json({ error: `No job found with ID ${jobId}.` });
+      }
+
+      prompt = `Provide details about the following job: Title: ${job.title}, Location: ${job.location}, Description: ${job.description}`;
+    } else {
+      prompt = `You are a job search assistant. Suggest suitable jobs for the following query: "${query}". Here is the list of available jobs: ${JSON.stringify(
+        jobs
+      )}`;
+    }
+
+    const chatSession = model.startChat({
+      generationConfig,
+      history: [
         {
           role: "user",
-          content: query,
+          parts: [
+            {
+              text: prompt,
+            },
+          ],
         },
       ],
     });
 
-    res.json({ response: completion.choices[0].message.content });
+    // Send the message (user query) to the AI model
+    const result = await chatSession.sendMessage(query);
+
+    // Log the result for debugging purposes
+    console.log(result.response.text());
+
+    // Send the AI's response back to the client
+    res.json({ response: result.response.text() });
   } catch (error) {
+    console.error("Error:", error);
     res.status(500).json({ error: error.message });
   }
 });
