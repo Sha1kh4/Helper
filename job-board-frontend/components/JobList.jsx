@@ -1,35 +1,26 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-interface Job {
-  id: number;
-  title: string;
-  description: string;
-  location: string;
-  salary: string;
-}
-
 export default function JobList() {
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [jobs, setJobs] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     // Use the base API URL from the environment variable and append the endpoint
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     if (apiUrl) {
-      fetch(`${apiUrl}/api/jobs`)  // Append /api/jobs to the base URL
+      fetch(`${apiUrl}/api/jobs`) // Append /api/jobs to the base URL
         .then((response) => response.json())
         .then((data) => {
-          console.log('Fetched jobs:', data);  // Log the response for debugging
+          console.log("Fetched jobs:", data); // Log the response for debugging
 
           // Check if the fetched data is an array, and update the state accordingly
           if (Array.isArray(data)) {
             setJobs(data);
           } else {
-            console.error('API response is not an array:', data);
+            console.error("API response is not an array:", data);
           }
         })
         .catch((error) => console.error("Error fetching jobs:", error));
@@ -65,7 +56,9 @@ export default function JobList() {
           <div key={job.id} className="border p-4 rounded-md">
             <h2 className="text-gray-900 text-xl font-semibold">{job.title}</h2>
             <p className="text-gray-600">{job.description}</p>
-            <p className="text-sm text-gray-500 mt-2">Location: {job.location}</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Location: {job.location}
+            </p>
             <p className="text-sm text-gray-500">Salary: {job.salary}</p>
             <div className="mt-2 flex justify-end">
               <Link

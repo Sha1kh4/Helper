@@ -7,7 +7,7 @@ export default function ChatInterface() {
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false); // State for loading
   const [typing, setTyping] = useState(""); // State for simulated typing effect
-  const [responseWords, setResponseWords] = useState<string[]>([]); // Split the response into words for the typing effect
+  const [responseWords, setResponseWords] = useState([]); // Split the response into words for the typing effect
   const [currentIndex, setCurrentIndex] = useState(0); // Track the current word index for the typing effect
 
   // Simulate typing effect when the response is available
@@ -33,7 +33,7 @@ export default function ChatInterface() {
     return () => clearInterval(intervalId); // Cleanup the interval on unmount or when typing is done
   }, [currentIndex, responseWords]); // Dependency on currentIndex and responseWords
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Start loading
     setResponse(""); // Clear previous response
@@ -77,7 +77,8 @@ export default function ChatInterface() {
         <button
           type="submit"
           className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-          disabled={loading} // Disable button while loading
+          // Disable button while loading
+          disabled={loading}
         >
           {loading ? "Sending..." : "Send"}
         </button>

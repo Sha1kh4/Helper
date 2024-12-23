@@ -1,4 +1,4 @@
-import JobList from "@/components/JobList";
+import JobList from "@/components/JobList"
 
 export default function Jobs() {
   return (
@@ -12,5 +12,5 @@ export default function Jobs() {
         </div>
       </div>
     </div>
-  );
+  )
 }

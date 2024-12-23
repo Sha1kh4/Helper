@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 
-export default function ApplicationForm({ jobId }: { jobId: string }) {
+export default function ApplicationForm({ jobId }) {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;

@@ -1,8 +1,6 @@
 import ApplicationForm from "@/components/ApplicationForm";
 
-type Params = Promise<{ id: string }>;
-
-export default async function Apply({ params }: { params: Params }) {
+export default async function Apply({ params }) {
   const { id } = await params;
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
